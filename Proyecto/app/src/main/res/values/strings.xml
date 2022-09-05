@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Proyecto</string>
+    <string name="user_txt">User</string>
+    <string name="password_txt">Password</string>
+    <string name="register_btn">Register</string>
+    <string name="enter_btn">Enter</string>
+</resources>
