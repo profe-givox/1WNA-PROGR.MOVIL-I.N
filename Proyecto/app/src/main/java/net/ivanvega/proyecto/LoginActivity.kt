@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 
 class LoginActivity : AppCompatActivity() {
@@ -14,6 +15,7 @@ class LoginActivity : AppCompatActivity() {
     lateinit var txtPass : EditText
     lateinit var btnEntrar : Button
     lateinit var btnRegistrar : Button
+    lateinit var  activityResultLauncher : ActivityResultLauncher<Intent>
 
 
 
@@ -21,6 +23,16 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        activityResultLauncher =
+            registerForActivityResult(
+                ActivityResultContracts.StartActivityForResult(),
+                ActivityResultCallback {
+                    it.data
+                    it.resultCode
+                }
+            )
+
         txtUser =  findViewById(R.id.txtUsuario)
         txtPass =  findViewById(R.id.txtPass)
 
@@ -57,17 +69,7 @@ class LoginActivity : AppCompatActivity() {
             //siguiente
 
 
-            //2) Usar el metodo starActivityFOrResult
-
-             val activityResultLauncher =
-                 registerForActivityResult(
-                ActivityResultContracts.StartActivityForResult(),
-                ActivityResultCallback {
-                    it.data
-                    it.resultCode
-                }
-                )
-
+            //2) Usar el metodo
 
             activityResultLauncher.launch(intent_activity)
 
