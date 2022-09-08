@@ -3,8 +3,10 @@ package net.ivanvega.proyecto
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
@@ -15,10 +17,9 @@ class LoginActivity : AppCompatActivity() {
     lateinit var txtPass : EditText
     lateinit var btnEntrar : Button
     lateinit var btnRegistrar : Button
+
+    //Objeto que permite mandar llamar una actividad que devolvera un resultado
     lateinit var  activityResultLauncher : ActivityResultLauncher<Intent>
-
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,8 +29,16 @@ class LoginActivity : AppCompatActivity() {
             registerForActivityResult(
                 ActivityResultContracts.StartActivityForResult(),
                 ActivityResultCallback {
-                    it.data
-                    it.resultCode
+                    if( it.resultCode== RESULT_OK){
+                        txtUser.text = Editable.Factory.getInstance().newEditable(it?.data?.getStringExtra("email"))
+                        val email =  it?.data?.getStringExtra("email")
+                         //it.data.getStringExtra("name")
+                        Toast.makeText(applicationContext,
+                            "email: ${email}", Toast.LENGTH_LONG).show()
+
+
+                    }
+
                 }
             )
 
@@ -70,7 +79,6 @@ class LoginActivity : AppCompatActivity() {
 
 
             //2) Usar el metodo
-
             activityResultLauncher.launch(intent_activity)
 
         }
