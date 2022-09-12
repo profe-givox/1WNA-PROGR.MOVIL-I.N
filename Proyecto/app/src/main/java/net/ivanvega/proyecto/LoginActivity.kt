@@ -24,13 +24,11 @@ class LoginActivity : AppCompatActivity() {
         btnRegistrar = findViewById(R.id.btnRegister)
 
         btnRegistrar.setOnClickListener {
-
             //Para abrir otra activity se debe:
             //Crear un Intent de un Activity
             val intent_activity = Intent(
                 applicationContext, RegisterActivity::class.java
             )
-
             //Abiri la activity
             startActivity(intent_activity)
 
