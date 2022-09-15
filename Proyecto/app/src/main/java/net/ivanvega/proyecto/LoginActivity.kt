@@ -65,8 +65,7 @@ class LoginActivity : AppCompatActivity() {
             val intent_activity = Intent(
                 applicationContext, RegisterActivity::class.java
             )
-<<<<<<< HEAD
-=======
+
             intent_activity.putExtra("par1",0)
             intent_activity.putExtra("par2","Register")
 
@@ -77,7 +76,6 @@ class LoginActivity : AppCompatActivity() {
                 this.putExtra("par2","Register")
             }*/
 
->>>>>>> 123515d73557a6192e2cef98ad405279fa79d317
             //Abiri la activity
             //startActivity(intent_activity)
 
