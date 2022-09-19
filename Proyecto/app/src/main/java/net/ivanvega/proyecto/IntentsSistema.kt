@@ -4,7 +4,9 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
+import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -34,7 +36,7 @@ class IntentsSistema : AppCompatActivity() {
 
         }
         btnI2.setOnClickListener {
-          val action_view = Intent(
+          val action_view = Intent  (
               Intent.ACTION_VIEW,
               //Uri.parse("geo:0,0?q=1600+Amphitheatre+Parkway,+Mountain+View,+California")
               Uri.parse("https://sicenet.itsur.edu.mx")
@@ -51,15 +53,52 @@ class IntentsSistema : AppCompatActivity() {
                  putExtra(Intent.EXTRA_TEXT, "Email message text")
              }
             //startActivity(intent_send)
-            actReslLaun.launch("text/*")
+            actReslLaun.launch("audio/*")
         }
 
         actReslLaun = registerForActivityResult(
             ActivityResultContracts.GetContent(),
             ActivityResultCallback {
+                Toast.makeText(applicationContext,
+                        "Uri: ${it.toString()}",
+                    Toast.LENGTH_LONG).show()
+
+                Log.e("ESTETAG",
+                    "Uri: ${it.toString()}" )
 
             }
         )
 
     }
+
+    override fun onStart() {
+        super.onStart()
+        Log.i("CILCLOVIDA", "Paso por onStart")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.i("CILCLOVIDA", "Paso por onResume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.i("CILCLOVIDA", "Paso por onPause")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.i("CILCLOVIDA", "Paso por onStop")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.i("CILCLOVIDA", "Paso por onDestroy")
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        Log.i("CILCLOVIDA", "Paso por onRestar")
+    }
+
 }
