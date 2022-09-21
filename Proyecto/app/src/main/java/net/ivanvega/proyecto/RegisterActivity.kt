@@ -2,14 +2,16 @@ package net.ivanvega.proyecto
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
+import android.widget.AdapterView.OnItemClickListener
 import android.widget.AdapterView.OnItemSelectedListener
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.navigation.NavigationBarView
 import java.util.*
 
-class RegisterActivity : AppCompatActivity() {
+class RegisterActivity : AppCompatActivity(), OnItemClickListener, OnItemSelectedListener {
 
     lateinit var  txtEmail: EditText
     lateinit var txtName : EditText
@@ -44,6 +46,9 @@ class RegisterActivity : AppCompatActivity() {
 
         //ASIGNACION DE ADAPTADOR
         spnSex.adapter = adapter
+
+        //spnSex.onItemSelectedListener = this
+
 
         //val onIS = object  : AdapterView.OnItemSelectedListener{
         //            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -83,6 +88,11 @@ class RegisterActivity : AppCompatActivity() {
             val datos = Intent()
             datos.putExtra("email", txtEmail.text.toString())
             datos.putExtra("name", txtName.text.toString())
+            Toast.makeText(applicationContext,
+                spnSex.selectedItem.toString(),
+                Toast.LENGTH_LONG
+                ).show()
+
             setResult(RESULT_OK, datos)
             finish()
 
@@ -90,6 +100,23 @@ class RegisterActivity : AppCompatActivity() {
 
 
 
+    }
+
+    override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+        //TODO("Not yet implemented")
+    }
+
+    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+        //TODO("Not yet implemented")
+        Log.d("SPINNER", "Elemnt selec<ed: ${arrSex[p2]}")
+        Toast.makeText(applicationContext,
+            "Elemnt selected: ${arrSex[p2]}", Toast.LENGTH_LONG
+        ).show()
+
+    }
+
+    override fun onNothingSelected(p0: AdapterView<*>?) {
+        //TODO("Not yet implemented")
     }
 
 }
