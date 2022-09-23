@@ -30,7 +30,6 @@ class FlowerAdapter (val dataset : Array<String>) : RecyclerView.Adapter<FlowerA
         return dataset.size
     }
 
-
 }
 
 
