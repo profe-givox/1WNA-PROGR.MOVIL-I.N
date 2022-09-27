@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import net.ivanvega.misrecyclersview.data.flowerList
 
 class MainActivity : AppCompatActivity() {
     lateinit var rvf : RecyclerView
@@ -17,8 +18,6 @@ class MainActivity : AppCompatActivity() {
             false
         )
 
-        val adaptador = FlowerAdapter(resources.getStringArray(R.array.flower_array))
 
-        rvf.adapter = adaptador
     }
 }
