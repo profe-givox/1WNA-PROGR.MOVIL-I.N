@@ -2,6 +2,7 @@ package net.ivanvega.misrecyclersview
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import net.ivanvega.misrecyclersview.data.flowerList
@@ -18,6 +19,14 @@ class MainActivity : AppCompatActivity() {
             false
         )
 
-
+        val adaptador = FlowerAdapter(
+                flowerList(resources),
+            {
+                Toast.makeText(applicationContext
+                , "Flor prsionada ${it.name}",
+                Toast.LENGTH_SHORT).show()
+            }
+        )
+        rvf.adapter = adaptador
     }
 }
