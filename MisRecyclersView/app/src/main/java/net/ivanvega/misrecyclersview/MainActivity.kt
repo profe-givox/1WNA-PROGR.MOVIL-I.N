@@ -55,25 +55,24 @@ class MainActivity : AppCompatActivity() {
          */
     }
 
-    fun mostrarDetailFlower(it: Flower) {
+    fun mostrarDetailFlower(flower: Flower) {
 
         val fcvl = findViewById<View>(R.id.fragment_container_view)
-        val fd = supportFragmentManager.findFragmentById(R.id.fragdetail)
+        val fcvf = supportFragmentManager.findFragmentById(R.id.fragment_container_view)
 
-        if(fcvl != null &&  fd==null ){
+        if(fcvl != null &&  fcvf!=null ){
 
-            val frag = FragmentFlowerDetail.newInstance(it.id.toString(),"")
+            val frag = FragmentFlowerDetail.newInstance(flower.id.toString(),"")
             val trans = supportFragmentManager.beginTransaction()
             trans.setReorderingAllowed(true)
             trans.replace(R.id.fragment_container_view, frag)
             trans.addToBackStack(null)
             trans.commit()
         }else{
-            val fragD = fd?.let {
-                it as FragmentFlowerDetail
+            val fragD = supportFragmentManager.findFragmentById(R.id.fragdetail)
+            fragD?.let {
+                (it as FragmentFlowerDetail).setDetailFlower(flower.id)
             }
-            fragD?.setDetailFlower(it.id)
-
         }
     }
 
