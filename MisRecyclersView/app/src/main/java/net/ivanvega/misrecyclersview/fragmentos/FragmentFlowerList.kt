@@ -6,10 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import net.ivanvega.misrecyclersview.DataSource
 import net.ivanvega.misrecyclersview.FlowerAdapter
+import net.ivanvega.misrecyclersview.MainActivity
 import net.ivanvega.misrecyclersview.R
 import net.ivanvega.misrecyclersview.data.flowerList
 
@@ -17,6 +20,8 @@ class FragmentFlowerList: Fragment(R.layout.layout_fragment_listflower) {
 
     lateinit var rvlf: RecyclerView
     lateinit var contexto : Context
+
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -29,10 +34,9 @@ class FragmentFlowerList: Fragment(R.layout.layout_fragment_listflower) {
         savedInstanceState: Bundle?
     ): View? {
 
-
         val layout =
             inflater.inflate(R.layout.layout_fragment_listflower,
-                container, false)
+                container,false)
 
         rvlf = layout.findViewById<RecyclerView>(R.id.recyclerView)
 
@@ -42,11 +46,15 @@ class FragmentFlowerList: Fragment(R.layout.layout_fragment_listflower) {
         )
 
         val adaptador = FlowerAdapter(
-            flowerList(resources),
+            DataSource.lsFlower,
             {
                 Toast.makeText(contexto
                     , "Flor prsionada ${it.name}",
                     Toast.LENGTH_SHORT).show()
+
+                    val act = activity as MainActivity
+                    act.mostrarDetailFlower(it)
+
             }
         )
 
