@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_main_fragment)
 
-        DataSource.lsFlower.addAll(flowerList(resources))
+
 
         val fcvl = findViewById<View>(R.id.fragment_container_view)
         val fcvf = supportFragmentManager.findFragmentById(R.id.fragment_container_view)
@@ -76,11 +76,37 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
+    //@RequiresApi(Build.VERSION_CODES.N)
     fun deleteFlower(id: Long) {
-        DataSource.lsFlower.removeIf {
+        /*DataSource.lsFlower.removeIf {
             it.id==id
+        }*/
+
+
+        var itemDF: Flower?        =null
+        for( fl in DataSource.lsFlower){
+           if(fl.id == id ){
+               itemDF = fl
+           }
         }
-        supportFragmentManager.popBackStack()
+        itemDF?.let {
+            DataSource.lsFlower.remove(it)
+        }
+
+
+        val fcvl = findViewById<View>(R.id.fragment_container_view)
+        val fcvf = supportFragmentManager.findFragmentById(R.id.fragment_container_view)
+
+        if(fcvl!=null && fcvf !=null){
+            supportFragmentManager.popBackStack()
+        }else{
+            DataSource.lsFlower.elementAtOrNull(0)?.let {
+                val fragD =
+                        supportFragmentManager.findFragmentById(R.id.fragdetail) as FragmentFlowerDetail
+                fragD?.setDetailFlower(it.id)
+            }
+        }
+
+
     }
 }

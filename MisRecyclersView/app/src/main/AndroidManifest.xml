@@ -4,6 +4,7 @@
     package="net.ivanvega.misrecyclersview">
 
     <application
+        android:name=".MiApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
