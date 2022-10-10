@@ -63,4 +63,8 @@ class FragmentFlowerList: Fragment(R.layout.layout_fragment_listflower) {
         return layout
     }
 
+    fun updateLs() {
+        rvlf.adapter?.notifyDataSetChanged()
+    }
+
 }

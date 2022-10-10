@@ -104,6 +104,10 @@ class MainActivity : AppCompatActivity() {
                 val fragD =
                         supportFragmentManager.findFragmentById(R.id.fragdetail) as FragmentFlowerDetail
                 fragD?.setDetailFlower(it.id)
+
+                val fragLs = supportFragmentManager.findFragmentById(R.id.fragls) as FragmentFlowerList
+
+                fragLs?.updateLs()
             }
         }
 
