@@ -8,7 +8,7 @@ import androidx.room.Update
 import net.ivanvega.misnotasa.data.model.Nota
 
 @Dao
-interface NotaDao {
+interface   NotaDao {
     @Insert
     fun insert(vararg nota: Nota)
     @Update
