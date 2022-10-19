@@ -5,7 +5,10 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
+
 import net.ivanvega.misnotasa.data.model.Nota
+
 
 @Dao
 interface   NotaDao {
@@ -19,5 +22,9 @@ interface   NotaDao {
     fun getAll() : List<Nota>
     @Query("SELECT * FROM Nota WHERE uid = :userId")
     fun getOneById(userId: Int): Nota
+
+    @Query("select * from Nota order by fecha desc")
+    fun getAllOrder() : Flow<List<Nota>>
+
 
 }
