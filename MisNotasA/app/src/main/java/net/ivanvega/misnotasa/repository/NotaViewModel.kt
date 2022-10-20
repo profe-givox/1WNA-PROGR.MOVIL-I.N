@@ -2,6 +2,7 @@ package net.ivanvega.misnotasa.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
@@ -10,10 +11,20 @@ import net.ivanvega.misnotasa.data.model.Nota
 
 class NotaViewModel (private val repository: NotasRepository)
     : ViewModel() {
-        val allNotas : LiveData<List<Nota>> = repository.allNotas as LiveData<List<Nota>>
+    val allNotas : LiveData<List<Nota>> = repository.allNotas as LiveData<List<Nota>>
 
     fun insertarAsync(nota: Nota) = viewModelScope.launch {
         repository.insertarAsync(nota)
     }
 
+}
+
+class NotaViewModelFactory(private val repository: NotasRepository) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(NotaViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return NotaViewModel(repository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
 }

@@ -27,4 +27,9 @@ interface   NotaDao {
     fun getAllOrder() : Flow<List<Nota>>
 
 
+    fun deleteAll() {
+        //TODO("Not yet implemented")
+    }
+
+
 }

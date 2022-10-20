@@ -4,6 +4,9 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import net.ivanvega.misnotasa.data.dao.NotaDao
 import net.ivanvega.misnotasa.data.model.Nota
 import java.util.concurrent.ExecutorService
@@ -13,19 +16,51 @@ import java.util.concurrent.Executors
  abstract class MisNotasDataBase: RoomDatabase() {
      abstract fun notaDao(): NotaDao
 
-     companion object{
+    private class NotaDatabaseCallback(
+        private val scope: CoroutineScope
+    ) : RoomDatabase.Callback() {
+
+        override fun onCreate(db: SupportSQLiteDatabase) {
+            super.onCreate(db)
+            INSTANCE?.let { database ->
+                scope.launch {
+                    var notaDao = database.notaDao()
+
+                    // Delete all content here.
+                    notaDao.deleteAll()
+
+                    // Add sample words.
+                    val nota1 = Nota(0,"Mi primer nota",
+                        "Registro", 0, null,false)
+                    val nota2 = Nota(0,"Mi segunda nota",
+                        "Registro", 0, null,false)
+                    val nota3 = Nota(0,"Mi tercer nota",
+                        "Registro", 0, null,false)
+
+                    notaDao.insert(nota1)
+                    notaDao.insert(nota2)
+                    notaDao.insert(nota3)
+
+                }
+            }
+        }
+    }
+
+
+    companion object{
         private var INSTANCE: MisNotasDataBase?=null
 
          val databaseexecutor :
                 ExecutorService =
             Executors.newFixedThreadPool(4)
 
-        fun getDatabase(context: Context): MisNotasDataBase {
+        fun getDatabase(context: Context, scope: CoroutineScope): MisNotasDataBase {
             return INSTANCE ?: synchronized(this){
                 val instance = Room.databaseBuilder(
                     context, MisNotasDataBase::class.java,
                     "midatabase"
-                ).build()
+                ).addCallback(NotaDatabaseCallback(scope))
+                    .build()
                 INSTANCE = instance
                 instance
             }
@@ -33,3 +68,4 @@ import java.util.concurrent.Executors
      }
 
 }
+
