@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.ivanvega.misnotasa.data.dao.NotaDao
 import net.ivanvega.misnotasa.data.model.Nota
@@ -23,7 +24,7 @@ import java.util.concurrent.Executors
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
             INSTANCE?.let { database ->
-                scope.launch {
+                scope.launch (Dispatchers.IO){
                     var notaDao = database.notaDao()
 
                     // Delete all content here.
@@ -37,9 +38,9 @@ import java.util.concurrent.Executors
                     val nota3 = Nota(0,"Mi tercer nota",
                         "Registro", 0, null,false)
 
-                    notaDao.insert(nota1)
-                    notaDao.insert(nota2)
-                    notaDao.insert(nota3)
+                    notaDao.insertAsync(nota1)
+                    notaDao.insertAsync(nota2)
+                    notaDao.insertAsync(nota3)
 
                 }
             }

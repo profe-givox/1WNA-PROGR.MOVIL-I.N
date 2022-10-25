@@ -1,9 +1,6 @@
 package net.ivanvega.misnotasa.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -11,7 +8,7 @@ import net.ivanvega.misnotasa.data.model.Nota
 
 class NotaViewModel (private val repository: NotasRepository)
     : ViewModel() {
-    val allNotas : LiveData<List<Nota>> = repository.allNotas as LiveData<List<Nota>>
+    val allNotas : LiveData<List<Nota>> = repository.allNotas.asLiveData()
 
     fun insertarAsync(nota: Nota) = viewModelScope.launch {
         repository.insertarAsync(nota)

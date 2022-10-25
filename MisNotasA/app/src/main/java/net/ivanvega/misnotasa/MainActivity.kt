@@ -15,6 +15,8 @@ import net.ivanvega.misnotasa.repository.NotaViewModelFactory
 
 class MainActivity : AppCompatActivity() {
 
+    var cont = 0
+
     private val notaViewModel: NotaViewModel by  viewModels {
         NotaViewModelFactory((application as MisNotasApplication).repository)
     }
@@ -29,10 +31,20 @@ class MainActivity : AppCompatActivity() {
         /*db =
             MisNotasDataBase.getDatabase(applicationContext)*/
 
+        notaViewModel.allNotas.observe( this) {
+            notas -> notas.let {
+                for (ele in  it){
+                    Log.d("ACTUA", ele.titulo)
+                }
+            }
+
+        }
+
         btnI = findViewById<Button>(R.id.buttonInsert)
         btnI.setOnClickListener {
-
-            MisNotasDataBase.databaseexecutor.execute {
+            cont++
+            notaViewModel.insertarAsync(Nota(0,"Nueva inserción $cont ","des",1,null,false))
+            /*MisNotasDataBase.databaseexecutor.execute {
                 val dao = db.notaDao()
 
                 val nota = Nota(0,"Mi primer nota",
@@ -46,10 +58,7 @@ class MainActivity : AppCompatActivity() {
                     Log.i("NOTASX", "${item.uid}  ${item.titulo}")
                 }
 
-
-
-
-            }
+            }*/
         }
     }
 }
