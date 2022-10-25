@@ -5,11 +5,14 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import androidx.activity.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
 import net.ivanvega.misnotasa.data.database.MisNotasDataBase
 import net.ivanvega.misnotasa.data.model.Nota
+import net.ivanvega.misnotasa.repository.NotaListAdapter
 import net.ivanvega.misnotasa.repository.NotaViewModel
 import net.ivanvega.misnotasa.repository.NotaViewModelFactory
 
@@ -31,8 +34,14 @@ class MainActivity : AppCompatActivity() {
         /*db =
             MisNotasDataBase.getDatabase(applicationContext)*/
 
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        val adapter = NotaListAdapter()
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
         notaViewModel.allNotas.observe( this) {
             notas -> notas.let {
+                adapter.submitList(it)
                 for (ele in  it){
                     Log.d("ACTUA", ele.titulo)
                 }
