@@ -49,6 +49,7 @@ import java.util.concurrent.Executors
 
 
     companion object{
+        @Volatile
         private var INSTANCE: MisNotasDataBase?=null
 
          val databaseexecutor :

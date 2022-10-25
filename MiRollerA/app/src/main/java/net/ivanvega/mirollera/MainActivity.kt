@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
             }
         )*/
 
-        img.setImageDrawable(resources.getDrawable(R.drawable.dice_3))
+//        img.setImageDrawable(resources.getDrawable(R.drawable.dice_3))
 
         boton.setOnClickListener {
             val al = diceRoller()
