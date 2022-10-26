@@ -8,6 +8,7 @@ import net.ivanvega.misnotasa.data.model.Nota
 
 class NotaViewModel (private val repository: NotasRepository)
     : ViewModel() {
+    var cont = 0
     val allNotas : LiveData<List<Nota>> = repository.allNotas.asLiveData()
 
     fun insertarAsync(nota: Nota) = viewModelScope.launch {
