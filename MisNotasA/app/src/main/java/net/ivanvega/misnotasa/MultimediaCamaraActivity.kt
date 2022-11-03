@@ -2,6 +2,7 @@ package net.ivanvega.misnotasa
 
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,6 +17,7 @@ import java.util.*
 
 class MultimediaCamaraActivity : AppCompatActivity() {
 
+    lateinit var photoURI: Uri
     private val REQUEST_IMAGE_CAPTURE: Int = 1000
     lateinit var binding : ActivityMultimediaCamaraBinding
 
@@ -38,7 +40,7 @@ class MultimediaCamaraActivity : AppCompatActivity() {
 
                     // Continue only if the File was successfully created
                     photoFile?.also {
-                        val photoURI: Uri = FileProvider.getUriForFile(
+                         photoURI = FileProvider.getUriForFile(
                             this,
                             "net.ivanvega.misnotasa.fileprovider",
                             it
@@ -76,8 +78,43 @@ class MultimediaCamaraActivity : AppCompatActivity() {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             /*val imageBitmap = data?.extras?.get("data") as Bitmap
             binding.imageViewFotoMiniatura.setImageBitmap(imageBitmap)*/
+
+            //Carga la imagen de manera escalada
+            //setPic()
+
+            //Carga la imagen a partir de URI
+            binding.imageViewFotoMiniatura.setImageURI(
+                photoURI
+            )
         }
 
     }
+
+    private fun setPic() {
+        // Get the dimensions of the View
+        val targetW: Int = binding.imageViewFotoMiniatura.width
+        val targetH: Int = binding.imageViewFotoMiniatura.height
+
+        val bmOptions = BitmapFactory.Options().apply {
+            // Get the dimensions of the bitmap
+            inJustDecodeBounds = true
+
+            val photoW: Int = outWidth
+            val photoH: Int = outHeight
+
+            // Determine how much to scale down the image
+            val scaleFactor: Int = Math.min(photoW / targetW, photoH / targetH)
+
+            // Decode the image file into a Bitmap sized to fill the View
+            inJustDecodeBounds = false
+            inSampleSize = scaleFactor
+            inPurgeable = true
+        }
+        BitmapFactory.decodeFile(currentPhotoPath, bmOptions)?.also { bitmap ->
+            binding.imageViewFotoMiniatura.setImageBitmap(bitmap)
+
+        }
+    }
+
 
 }
