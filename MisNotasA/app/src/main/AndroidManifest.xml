@@ -6,8 +6,9 @@
         android:name="android.hardware.camera"
         android:required="false" />
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:name=".MisNotasApplication"
@@ -20,6 +21,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MisNotasA"
         tools:targetApi="31">
+        <activity
+            android:name=".AudioPermisosActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".MultimediaCamaraActivity"
             android:exported="true">
@@ -36,12 +44,12 @@
         <activity
             android:name=".MainActivity"
             android:exported="true">
-
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <!--<provider
+        <!--
+<provider
             android:name=".MyFileProvider"
             android:authorities="net.ivanvega.misnotasa.fileprovider"
             android:exported="false"
@@ -49,7 +57,8 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths"></meta-data>
-        </provider>-->
+        </provider>
+        -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="net.ivanvega.misnotasa.fileprovider"
@@ -57,7 +66,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths" />
         </provider>
     </application>
 
