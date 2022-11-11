@@ -1,5 +1,6 @@
 package net.ivanvega.misnotasa
 
+import android.app.Activity
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import net.ivanvega.misnotasa.databinding.ActivityAudioPermisosBinding
 
 class AudioPermisosActivity : AppCompatActivity() {
@@ -63,7 +65,20 @@ class AudioPermisosActivity : AppCompatActivity() {
             // include a "cancel" or "no thanks" button that allows the user to
             // continue using your app without granting the permission.
                 //showInContextUI(...)
-                Toast.makeText(applicationContext, "Debes dar perimso para grabar audios", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(applicationContext, "Debes dar perimso para grabar audios", Toast.LENGTH_SHORT).show()
+                MaterialAlertDialogBuilder(this
+                   )
+                    .setTitle("Title")
+                    .setMessage("Debes dar perimso para grabar audios")
+                    .setNegativeButton("Cancel") { dialog, which ->
+                        // Respond to negative button press
+                    }
+                    .setPositiveButton("OK") { dialog, which ->
+                        // Respond to positive button press
+                        requestPermissionLauncher.launch(
+                            "android.permission.RECORD_AUDIO")
+                    }
+                    .show()
             }
             else -> {
                 // You can directly ask for the permission.
