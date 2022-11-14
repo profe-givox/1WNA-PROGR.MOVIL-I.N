@@ -58,6 +58,7 @@ class AudioPermisosActivity : AppCompatActivity() {
                 "android.permission.RECORD_AUDIO"
             ) == PackageManager.PERMISSION_GRANTED -> {
                 // You can use the API that requires the permission.
+
             }
             shouldShowRequestPermissionRationale("android.permission.RECORD_AUDIO") -> {
             // In an educational UI, explain to the user why your app requires this
@@ -75,17 +76,61 @@ class AudioPermisosActivity : AppCompatActivity() {
                     }
                     .setPositiveButton("OK") { dialog, which ->
                         // Respond to positive button press
-                        requestPermissionLauncher.launch(
-                            "android.permission.RECORD_AUDIO")
+                        /*requestPermissionLauncher.launch(
+                            "android.permission.RECORD_AUDIO")*/
+
+                        // You can directly ask for the permission.
+                        requestPermissions(
+                            arrayOf("android.permission.RECORD_AUDIO",
+                                "android.permission.WRITE_EXTERNAL_STORAGE"),
+                            1001)
+
                     }
                     .show()
             }
             else -> {
                 // You can directly ask for the permission.
                 // The registered ActivityResultCallback gets the result of this request.
-                requestPermissionLauncher.launch(
-                    "android.permission.RECORD_AUDIO")
+                /*requestPermissionLauncher.launch(
+                    "android.permission.RECORD_AUDIO")*/
+                requestPermissions(
+                    arrayOf("android.permission.RECORD_AUDIO",
+                        "android.permission.WRITE_EXTERNAL_STORAGE"),
+                    1001)
             }
         }
     }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            1001 -> {
+                // If request is cancelled, the result arrays are empty.
+                if ((grantResults.isNotEmpty() &&
+                            grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    // Permission is granted. Continue the action or workflow
+                    // in your app.
+
+                } else {
+                    // Explain to the user that the feature is unavailable because
+                    // the features requires a permission that the user has denied.
+                    // At the same time, respect the user's decision. Don't link to
+                    // system settings in an effort to convince the user to change
+                    // their decision.
+                }
+                return
+            }
+
+            // Add other 'when' lines to check for other
+            // permissions this app might request.
+            else -> {
+                // Ignore all other requests.
+            }
+        }
+    }
+
 }
