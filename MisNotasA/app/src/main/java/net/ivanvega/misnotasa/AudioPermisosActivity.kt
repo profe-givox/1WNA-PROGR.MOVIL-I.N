@@ -1,25 +1,71 @@
 package net.ivanvega.misnotasa
 
+import android.Manifest.permission.RECORD_AUDIO
 import android.app.Activity
 import android.content.pm.PackageManager
+import android.media.MediaPlayer
+import android.media.MediaRecorder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import net.ivanvega.misnotasa.databinding.ActivityAudioPermisosBinding
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
+private const val LOG_TAG = "AudioRecordTest"
 class AudioPermisosActivity : AppCompatActivity() {
+    private var mStartRecording: Boolean = true
     lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
     lateinit var binding: ActivityAudioPermisosBinding
+
+    private var fileName: String = ""
+
+
+    private var recorder: MediaRecorder? = null
+
+
+    private var player: MediaPlayer? = null
+
+    // Requesting permission to RECORD_AUDIO
+    private var permissionToRecordAccepted = false
+    private var permissions: Array<String> = arrayOf(
+        "android.permission.RECORD_AUDIO",
+        "android.permission.WRITE_EXTERNAL_STORAGE"
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAudioPermisosBinding.inflate(layoutInflater)
         setContentView(binding.root)
         iniPerm()
-        binding.btnGrabar .setOnClickListener { grabar() }
+        binding.btnGrabar.setOnClickListener {
+            grabar()
+            onRecord(mStartRecording)
+            binding.btnGrabar.text = when (mStartRecording) {
+                true -> "Stop recording"
+                false -> "Start recording"
+            }
+            mStartRecording = !mStartRecording
+        }
+        iniUI()
+    }
+
+    private fun onRecord(start: Boolean) = if (start) {
+        iniciarGraabacion()
+    } else {
+        stopRecording()
+    }
+
+    private fun iniUI() {
+        binding.btnGrabar. text = "Start recording"
     }
 
     private fun iniPerm(){
@@ -111,10 +157,12 @@ class AudioPermisosActivity : AppCompatActivity() {
             1001 -> {
                 // If request is cancelled, the result arrays are empty.
                 if ((grantResults.isNotEmpty() &&
-                            grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                            grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                            grantResults[1] == PackageManager.PERMISSION_GRANTED
+                            )) {
                     // Permission is granted. Continue the action or workflow
                     // in your app.
-
+                    iniciarGraabacion()
                 } else {
                     // Explain to the user that the feature is unavailable because
                     // the features requires a permission that the user has denied.
@@ -130,6 +178,51 @@ class AudioPermisosActivity : AppCompatActivity() {
             else -> {
                 // Ignore all other requests.
             }
+        }
+    }
+
+    private fun iniciarGraabacion() {
+        recorder = MediaRecorder().apply {
+            setAudioSource(MediaRecorder.AudioSource.MIC)
+            setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+            createAudioFile()
+            setOutputFile(fileName)
+            setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+
+            try {
+                prepare()
+            } catch (e: IOException) {
+                Log.e(LOG_TAG, "prepare() failed")
+            }
+
+            start()
+        }
+    }
+
+    private fun stopRecording() {
+        recorder?.apply {
+            stop()
+            release()
+        }
+        recorder = null
+    }
+
+
+    @Throws(IOException::class)
+    fun createAudioFile(): File {
+        // Create an image file name
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File? =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
+        //val storageDir: File? = filesDir
+        return File.createTempFile(
+            "AUDIO_${timeStamp}_", /* prefix */
+            ".mp3", /* suffix */
+            storageDir /* directory */
+        ).apply {
+            // Save a file: path for use with ACTION_VIEW intents
+            fileName = absolutePath
+
         }
     }
 
