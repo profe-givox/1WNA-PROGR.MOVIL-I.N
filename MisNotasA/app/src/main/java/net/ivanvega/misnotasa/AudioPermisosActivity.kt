@@ -56,7 +56,41 @@ class AudioPermisosActivity : AppCompatActivity() {
             mStartRecording = !mStartRecording
         }
         iniUI()
+        binding.btnRepro.setOnClickListener {
+            onPlay(mStartPlaying)
+            binding.btnRepro.text = when (mStartPlaying) {
+                true -> "Stop playing"
+                false -> "Start playing"
+            }
+            mStartPlaying = !mStartPlaying
+        }
     }
+
+    private fun onPlay(start: Boolean) = if (start) {
+        startPlaying()
+    } else {
+        stopPlaying()
+    }
+
+    private fun stopPlaying() {
+        player?.release()
+        player = null
+    }
+
+    private fun startPlaying() {
+        player = MediaPlayer().apply {
+            try {
+                setDataSource(fileName)
+                prepare()
+                start()
+            } catch (e: IOException) {
+                Log.e(LOG_TAG, "prepare() failed")
+            }
+        }
+    }
+
+    var mStartPlaying = true
+
 
     private fun onRecord(start: Boolean) = if (start) {
         iniciarGraabacion()
