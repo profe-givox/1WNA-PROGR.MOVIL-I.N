@@ -2,12 +2,17 @@ package net.ivanvega.misnotasa
 
 import android.Manifest.permission.RECORD_AUDIO
 import android.app.Activity
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
+import android.os.SystemClock
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -19,6 +24,7 @@ import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 private const val LOG_TAG = "AudioRecordTest"
 class AudioPermisosActivity : AppCompatActivity() {
@@ -46,6 +52,7 @@ class AudioPermisosActivity : AppCompatActivity() {
         binding = ActivityAudioPermisosBinding.inflate(layoutInflater)
         setContentView(binding.root)
         iniPerm()
+        //MiReceiverAlarma.createNotificationChannel(applicationContext, null)
         binding.btnGrabar.setOnClickListener {
             grabar()
             onRecord(mStartRecording)
@@ -64,7 +71,26 @@ class AudioPermisosActivity : AppCompatActivity() {
             }
             mStartPlaying = !mStartPlaying
         }
+
+        binding.btnAlarma.setOnClickListener {
+
+
+            alarmMgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            alarmIntent = Intent(applicationContext, MiReceiverAlarma::class.java).let { intent ->
+                PendingIntent.getBroadcast(applicationContext, 1001, intent, 0)
+            }
+
+            alarmMgr?.set(
+                AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime() + 5 * 1000,
+                alarmIntent
+            )
+
+        }
     }
+
+    private var alarmMgr: AlarmManager? = null
+    private lateinit var alarmIntent: PendingIntent
 
     private fun onPlay(start: Boolean) = if (start) {
         startPlaying()
