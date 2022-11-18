@@ -1,6 +1,7 @@
 package net.ivanvega.misnotasa
 
 import android.R
+import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -9,18 +10,54 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
+import net.ivanvega.misnotasa.data.database.MisNotasDataBase
+import net.ivanvega.misnotasa.data.model.Nota
 
 
 class MiReceiverAlarma : BroadcastReceiver() {
 
 
     override fun onReceive(p0: Context?, p1: Intent?) {
+        val bd = (p0?.applicationContext  as MisNotasApplication ).database
+        var notas: List<Nota>
+        MisNotasDataBase.databaseexecutor.execute{
+            notas = bd.notaDao().getAll()
+            for (item in notas){
+                Log.i("NOTASX", "${item.uid}  ${item.titulo}")
+            }
+        }
+
+        val repo = (p0?.applicationContext  as MisNotasApplication ).repository
+        val notasData = repo.allNotas.asLiveData()
+        notasData.observeForever {
+            for (item in it){
+                Log.i("NOTASXLD", "${item.uid}  ${item.titulo}")
+            }
+        }
+
         p0?.let { createNotificationChannel(it, null) }
-        Log.d("DIF-ALARMA", "PERRO-ROJO");
-        p0?.let { p1?.let { it1 -> mostrarNotificacion(it, it1) } };
-        Log.d("DIF-ALARMA", "NOTIFICACION LANZADA");
+        Log.d("PRUEBABOOTEO", "BROADCAST: ${p1?.action}" )
+        Toast.makeText(p0,  "BROADCAST: ${p1?.action}",Toast.LENGTH_LONG ).show()
+        when (p1?.action ) {
+            // Set the alarm here.
+            "android.intent.action.BOOT_COMPLETED" -> {
+                Log.d("SEBOOTEO", "SE HA CARGADO ANDROID");
+                //ESTABLECER ALARMA
+                p0?.let { p1?.let { it1 -> mostrarNotificacion(it, it1) } };
+            }
+            else -> {
+
+                Log.d("DIF-ALARMA", "PERRO-ROJO");
+                p0?.let { p1?.let { it1 -> mostrarNotificacion(it, it1) } };
+                Log.d("DIF-ALARMA", "NOTIFICACION LANZADA");
+            }
+        }
+
     }
 
     private fun mostrarNotificacion(context: Context, intent: Intent) {

@@ -1,6 +1,8 @@
 package net.ivanvega.misnotasa
 
 import android.app.Application
+import android.content.ComponentName
+import android.content.pm.PackageManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import net.ivanvega.misnotasa.data.database.MisNotasDataBase
@@ -14,5 +16,18 @@ class MisNotasApplication : Application() {
     // rather than when the application starts
     val database by lazy { MisNotasDataBase.getDatabase(this, applicationScope) }
     val repository by lazy { NotasRepository(database.notaDao()) }
+
+    override fun onCreate() {
+        super.onCreate()
+
+        val receiver = ComponentName(this, MiReceiverAlarma::class.java)
+
+        this.packageManager.setComponentEnabledSetting(
+            receiver,
+            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+            PackageManager.DONT_KILL_APP
+        )
+
+    }
 
 }
