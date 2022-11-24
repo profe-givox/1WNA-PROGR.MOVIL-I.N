@@ -8,14 +8,17 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import net.ivanvega.misnotasa.data.dao.MultimediaDao
 import net.ivanvega.misnotasa.data.dao.NotaDao
+import net.ivanvega.misnotasa.data.model.Multimedia
 import net.ivanvega.misnotasa.data.model.Nota
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-@Database(entities = arrayOf(Nota::class), version = 1)
+@Database(entities = arrayOf(Nota::class, Multimedia::class), version = 1)
  abstract class MisNotasDataBase: RoomDatabase() {
      abstract fun notaDao(): NotaDao
+     abstract fun multimediaDao(): MultimediaDao
 
     private class NotaDatabaseCallback(
         private val scope: CoroutineScope

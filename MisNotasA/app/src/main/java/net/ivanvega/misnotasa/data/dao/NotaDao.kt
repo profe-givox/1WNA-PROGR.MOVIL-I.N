@@ -16,7 +16,7 @@ import net.ivanvega.misnotasa.data.model.Nota
 interface   NotaDao {
 
     @Insert
-    suspend fun insertAsync(vararg nota: Nota)
+    suspend fun insertAsync( nota: Nota): Long
 
     @Update
     fun update(nota: Nota)

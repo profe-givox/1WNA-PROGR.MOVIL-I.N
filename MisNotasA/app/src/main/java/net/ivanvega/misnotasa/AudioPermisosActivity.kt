@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -12,7 +13,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import net.ivanvega.misnotasa.databinding.ActivityAudioPermisosBinding
 
 class AudioPermisosActivity : AppCompatActivity() {
-    lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
+    lateinit var requestMultiplePermissionLauncher: ActivityResultLauncher<Array<String> >
+    lateinit var requestPermissionLauncher:  ActivityResultLauncher<String>
     lateinit var binding: ActivityAudioPermisosBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

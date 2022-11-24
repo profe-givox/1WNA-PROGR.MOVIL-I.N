@@ -11,6 +11,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 import net.ivanvega.misnotasa.data.database.MisNotasDataBase
+import net.ivanvega.misnotasa.data.model.Multimedia
 import net.ivanvega.misnotasa.data.model.Nota
 import net.ivanvega.misnotasa.repository.NotaListAdapter
 import net.ivanvega.misnotasa.repository.NotaViewModel
@@ -21,7 +22,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private val notaViewModel: NotaViewModel by  viewModels {
-        NotaViewModelFactory((application as MisNotasApplication).repository)
+        NotaViewModelFactory((application as MisNotasApplication).repositoryN,(application as MisNotasApplication).repositoryM)
     }
 
     private lateinit var db: MisNotasDataBase
@@ -52,7 +53,9 @@ class MainActivity : AppCompatActivity() {
         btnI = findViewById<Button>(R.id.buttonInsert)
         btnI.setOnClickListener {
             notaViewModel.cont++
-            notaViewModel.insertarAsync(Nota(0,"Nueva inserción ${notaViewModel.cont} ","des",1,null,false))
+            notaViewModel.insertarAsync(Nota(0,"Nueva inserción ${notaViewModel.cont} ","des",1,null,false),
+                listOf(Multimedia(0,0, 1, "path/uri/anyware"))
+                )
             /*MisNotasDataBase.databaseexecutor.execute {
                 val dao = db.notaDao()
 
