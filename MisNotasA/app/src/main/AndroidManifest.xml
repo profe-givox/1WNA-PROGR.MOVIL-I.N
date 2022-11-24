@@ -6,9 +6,11 @@
         android:name="android.hardware.camera"
         android:required="false" />
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".MisNotasApplication"
@@ -22,9 +24,18 @@
         android:theme="@style/Theme.MisNotasA"
         tools:targetApi="31">
         <activity
+            android:name=".ActivityWithCompose"
+            android:exported="true"
+            android:label="@string/title_activity_with_compose"
+            android:theme="@style/Theme.MisNotasA">
+
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".AudioPermisosActivity"
             android:exported="true">
-
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -32,8 +43,6 @@
         <activity
             android:name=".MultimediaCamaraActivity"
             android:exported="true">
-
-
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -55,7 +64,7 @@
             android:name=".MyFileProvider"
             android:authorities="net.ivanvega.misnotasa.fileprovider"
             android:exported="false"
-            android:grantUriPermissions="true">
+            android:grantUriPermis<sions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths"></meta-data>
@@ -70,6 +79,17 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <receiver
+            android:name=".MiReceiverAlarma"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
+
+        </receiver>
+
     </application>
 
 </manifest>

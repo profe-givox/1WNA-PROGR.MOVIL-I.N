@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">MisNotasA</string>
+
+    <string name="channel_name">Recordatorios</string>
+    <string name="channel_description">Recordatorios de tareas</string>
+    <string name="title_activity_with_compose">ActivityWithCompose</string>
+
+
 </resources>
