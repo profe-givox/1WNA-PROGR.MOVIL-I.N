@@ -32,7 +32,7 @@ class MiReceiverAlarma : BroadcastReceiver() {
             }
         }
 
-        val repo = (p0?.applicationContext  as MisNotasApplication ).repository
+        val repo = (p0?.applicationContext  as MisNotasApplication ).repositoryN
         val notasData = repo.allNotas.asLiveData()
         notasData.observeForever {
             for (item in it){
